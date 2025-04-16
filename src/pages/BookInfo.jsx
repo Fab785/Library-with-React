@@ -25,7 +25,7 @@ const BookInfo = ({ books, addItemToCart }) => {
             </div>
             <div className="book__selected">
               <figure className="book__selected--figure">
-                <img className="book__selected--img" src={book.url} alt="" />
+                <img assName="book__selected--img" src={book.url} alt="" />
               </figure>
               <div className="book__selected--description">
                 <h2 className="book__selected--title">{book.title}</h2>

@@ -1,77 +1,69 @@
-import './index.css';
-import Nav from './components/Nav'
-import Footer from './components/Footer.jsx'
-import React, { useState, useEffect} from "react";
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Books from './pages/Books.jsx'
-import { books } from './data';
-import BookInfo from './pages/BookInfo.jsx'
-import Cart from "./pages/Cart"
- 
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Home from "./pages/Home";
+import Books from "./pages/Books";
+import BookInfo from "./pages/BookInfo";
+import Cart from "./pages/Cart";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
+import { books } from "./data";
+
 function App() {
-  const [cart, setCart] = useState([]); 
+  const [cart, setCart] = useState([]);
 
-  function addToCart(book) {
-    setCart([...cart, {...book, quantity: 1}]);
-  }
-
-  function changeQuantity(book, quantity) {
-    setCart(
-      cart.map((item) => 
-         item.id === book.id
-        ? {
-          ...item,
-          quantity: +quantity,
-        }
-        : item
-      )
+  function addItemToCart(book) {
+    const existing = cart.find(item => item.id === book.id);
+    setCart(existing
+      ? cart.map(item =>
+          item.id === book.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      : [...cart, { ...book, quantity: 1 }]
     );
   }
 
+  function updateCart(item, quantity) {
+    setCart(cart.map(cartItem =>
+      cartItem.id === item.id ? { ...cartItem, quantity } : cartItem
+    ));
+  }
+
   function removeItem(item) {
-    setCart(cart.filter(book => book.id !== item.id))
+    setCart(cart.filter(cartItem => cartItem.id !== item.id));
   }
 
-  function numberOfItems () {
-    let counter = 0;
-    cart.forEach(item => {
-      counter += item.quantity
-    })
-    return counter;
+  function numberOfItems() {
+    return cart.reduce((sum, item) => sum + item.quantity, 0);
   }
-    
 
-  useEffect(() => {
-    console.log(cart)
-  }, [cart])
-   
+  function calcPrices() {
+    const total = cart.reduce(
+      (sum, item) => sum + (item.salePrice || item.originalPrice) * item.quantity,
+      0
+    );
+    return {
+      subtotal: total * 0.9,
+      tax: total * 0.1,
+      total,
+    };
+  }
 
-  useEffect(() => {
-    console.log(cart);
-  }, [cart])
   return (
     <Router>
-        <div className="App">
-          <Nav numberOfItems={numberOfItems()} />
-          <Route path="/" exact component={Home} />
-          <Route path="/books" exact render={() => <Books books={books}  />}/>
-          <Route
-           path="/books/:id" 
-           render={() => (
-           <BookInfo books={books} addToCart={addToCart} cart={cart}/>
-          )} 
-          />
-          <Route 
-            path="/cart" 
-            render={() => (
-              <Cart books={books} cart={cart} changeQuantity={changeQuantity} />
-            )}
-          />  
-          <Footer />
-        </div>
+      <Nav numberOfItems={numberOfItems()} />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/books" render={() => <Books books={books} />} />
+        <Route path="/books/:id" render={() => <BookInfo books={books} addItemToCart={addItemToCart} />} />
+        <Route path="/cart" render={() => <Cart cart={cart} updateCart={updateCart} removeItem={removeItem} totals={calcPrices()} />} />
+      </Switch>
+      <Footer />
     </Router>
   );
 }
 
 export default App;
+
+
+

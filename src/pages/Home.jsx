@@ -1,23 +1,23 @@
-import React from 'react'
-import Landing from '../components/Landing';
-import Featured from '../components/Featured';
-import Explore from '../components/Explore';
-import Highlight from '../components/Highlights';
-import Discounted from '../components/Discounted';
+import React from "react";
+import Landing from "../components/Landing";
+import Highlights from "../components/Highlights";
+import Features from "../components/Featured";
+import CheapestBooks from "../components/CheapestBooks";
+import Explore from "../components/Explore";
 
 const Home = () => {
   return (
     <>
-    <Landing />
-    <Highlight />
-    <Featured />
-    <Discounted />
-    <Explore />
-          
-    
+      <Landing />
+      <main>
+        <Highlights />
+        <Features />
+        <CheapestBooks />
+        <Explore />
+      </main>
     </>
-    
   );
-}
+};
 
 export default Home;
+

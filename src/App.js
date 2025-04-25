@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Books from "./pages/Books";
 import BookInfo from "./pages/BookInfo";
 import Cart from "./pages/Cart";
-import Nav from "./components/Navbar";
+import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { books } from "./data";
 
@@ -51,7 +51,7 @@ function App() {
 
   return (
     <Router>
-      <Nav numberOfItems={numberOfItems()} />
+      <Navbar numberOfItems={numberOfItems()} />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/books" render={() => <Books books={books} />} />

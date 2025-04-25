@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Books from "./pages/Books";
 import BookInfo from "./pages/BookInfo";
 import Cart from "./pages/Cart";
-import Nav from "./components/Nav";
+import Nav from "./components/Nav.jsx";
 import Footer from "./components/Footer";
 import { books } from "./data";
 
